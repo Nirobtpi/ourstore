@@ -1,3 +1,72 @@
+<?php
+require_once("config.php");
+session_start();
+
+
+
+if (!isset($_SESSION['user_email']) and !isset($_SESSION['user_mobile'])) {
+    header("location:login.php");
+}
+
+
+
+
+if (isset($_POST['email_verification'])) {
+    $user_code = $_POST['email_code'];
+
+    $emailCode = $connection->prepare("SELECT email_code FROM users WHERE email=?");
+    $emailCode->execute(array($_SESSION['user_email']));
+    $getemailcode = $emailCode->fetch(PDO::FETCH_ASSOC);
+
+
+    if (empty($user_code)) {
+        $error = "Email Code is Required!";
+    } elseif ($getemailcode['email_code'] != $user_code) {
+        $error = "Email Code is Wrong!";
+    } else {
+        $stm = $connection->prepare("UPDATE users SET email_code=?,email_status=? WHERE email=?");
+        $stm->execute(array(null, 1, $_SESSION['user_email']));
+
+        $_SESSION['email_verify'] = 1;
+
+
+        $success = "Email Validation Success!";
+        // header("location:index.php");
+    }
+}
+
+
+if (isset($_POST['mobile_verification'])) {
+    $mobile_code = $_POST['mobile_code'];
+
+    $mobilecode = $connection->prepare("SELECT mobile_code FROM users WHERE mobile=?");
+    $mobilecode->execute(array($_SESSION['user_mobile']));
+    $getmobilecode = $mobilecode->fetch(PDO::FETCH_ASSOC);
+
+    if (empty($mobile_code)) {
+        $error = "Mobile Code is Required!";
+    } elseif ($getmobilecode['mobile_code'] != $mobile_code) {
+        $error = "Mobile Code is Wrong!";
+    } else {
+        $stm = $connection->prepare("UPDATE users SET mobile_code=?,mobile_status=? WHERE mobile=?");
+        $stm->execute(array(null, 1, $_SESSION['user_mobile']));
+
+        $_SESSION['mobile_verify'] = 1;
+
+
+        // header("location:login.php");
+?>
+        <script>
+            setTimeout(function() {
+                window.location.href = "login.php"
+            },2000)
+        </script>
+<?php
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 
@@ -36,20 +105,52 @@
                     <div class="form-input-content">
                         <div class="card login-form mb-0">
                             <div class="card-body pt-5">
-                                <a class="text-center" href="index.php">
+                                <a class="text-center" href="verification.php">
                                     <h2>Verification</h2>
                                 </a>
 
-                                <form method="POST" action="" class="mt-5 mb-5 login-input">
-                                    <div class="form-group">
-                                        <input type="text" name="username" class="form-control" placeholder="Username">
+                                <?php if (isset($error)) : ?>
+                                    <div class="alert alert-danger">
+                                        <?php echo $error; ?>
                                     </div>
-                                    <div class="form-group">
-                                        <input name="password" type="password" class="form-control" placeholder="Password">
+                                <?php endif; ?>
+
+                                <?php if (isset($_SESSION['email_verify']) != 1) : ?>
+                                    <form method="POST" action="" class="mt-5 mb-5 login-input">
+                                        <?php if (!isset($_POST['email_verification'])) : ?>
+                                            <div class="alert alert-success">
+                                                Please Cheek Your Email:<?php echo $_SESSION['user_email'] ?> , Then Submit The Otp Code.
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <div class="form-group">
+                                            <input type="text" name="email_code" class="form-control" placeholder="Email Code">
+                                        </div>
+                                        <button type="submit" name="email_verification" class="btn login-form__btn submit w-100">Email Verification</button>
+                                    </form>
+                                <?php else : ?>
+                                    <div class="alert alert-success">
+                                        your verification success!
                                     </div>
-                                    <button type="submit" name="login_form" class="btn login-form__btn submit w-100">Login</button>
-                                </form>
-                                <p class="mt-5 login-form__footer">Dont have account? <a href="registration.php" class="text-primary">Registration</a> now</p>
+                                <?php endif; ?>
+
+                                <?php if (isset($_SESSION['mobile_verify']) != 1) : ?>
+                                    <form method="POST" action="" class="mt-5 mb-5 login-input">
+                                        <?php if (!isset($_POST['mobile_verification'])) : ?>
+                                            <div class="alert alert-success">
+                                                Please Cheek Your Phone Number:<?php echo $_SESSION['user_mobile'] ?> , Then Submit The Otp Code.
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <input type="text" name="mobile_code" class="form-control" placeholder="Phone Code">
+                                        </div>
+                                        <button type="submit" name="mobile_verification" class="btn login-form__btn submit w-100">Mobile Verification</button>
+                                    </form>
+                                <?php else : ?>
+                                    <div class="alert alert-success">
+                                        your verification success!
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -62,6 +163,23 @@
     <!--**********************************
         Scripts
     ***********************************-->
+    <?php
+
+    if (isset($_SESSION['email_verify']) and isset($_SESSION['mobile_verify'])) {
+
+        $stm = $connection->prepare("UPDATE users SET status=? WHERE email_status=? AND mobile_status=? AND email=? AND mobile=?");
+        $stm->execute(array("Active", 1, 1, $_SESSION['user_email'], $_SESSION['user_mobile']));
+
+        unset($_SESSION['email_verify']);
+        unset($_SESSION['mobile_verify']);
+
+        unset($_SESSION['user_email']);
+        unset($_SESSION['user_mobile']);
+    }
+
+
+    ?>
+
     <script src="plugins/common/common.min.js"></script>
     <script src="js/custom.min.js"></script>
     <script src="js/settings.js"></script>

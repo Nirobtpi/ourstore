@@ -1,6 +1,8 @@
 <?php
 require_once("config.php");
 session_start();
+
+
 if (isset($_POST['login_form'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -23,6 +25,28 @@ if (isset($_POST['login_form'])) {
                 $_SESSION['user'] = $userdata;
                 header("location:index.php");
             } else {
+
+                // user verification 
+                $_SESSION['user_email']= $userdata['email'];
+                $_SESSION['user_mobile']= $userdata['mobile'];
+
+                // emial varification code 
+                $email_code = rand(111111, 999999);
+
+                $stm = $connection->prepare("UPDATE users SET email_code=? WHERE email=?");
+                $stm->execute(array($email_code, $userdata['email']));
+
+                // send emial for varification 
+                $message = "Your verification code is:" . $email_code;
+                mail($userdata['email'], "Email Verification", $message);
+
+                // mobile verification 
+                // $mobile_code = rand(111111, 999999);
+
+                // $stm = $connection->prepare("UPDATE users SET mobile_code=? WHERE mobile=?");
+                // $stm->execute(array($mobile_code, $userdata['mobile']));
+
+
                 header("location:verification.php");
             }
         } else {
