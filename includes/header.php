@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('config.php');
+require_once('../config.php');
 
 if (!isset($_SESSION['user'])) {
     header("location:login.php");
@@ -22,12 +22,12 @@ $profile = getProfile($_SESSION['user']['id']);
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Pignose Calender -->
-    <link href="./plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
+    <link href="../plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <!-- Chartist -->
-    <link rel="stylesheet" href="./plugins/chartist/css/chartist.min.css">
-    <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" href="../plugins/chartist/css/chartist.min.css">
+    <link rel="stylesheet" href="../plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
     <!-- Custom Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
 </head>
 
@@ -58,11 +58,11 @@ $profile = getProfile($_SESSION['user']['id']);
         ***********************************-->
         <div class="nav-header">
             <div class="brand-logo">
-                <a href="index.php">
-                    <b class="logo-abbr"><img src="images/logo.png" alt=""> </b>
+                <a href="../dashboard/index.php">
+                    <b class="logo-abbr"><img src="../images/logo.png" alt=""> </b>
                     <span class="logo-compact"><img src="./images/logo-compact.png" alt=""></span>
                     <span class="brand-title">
-                        <img src="images/logo-text.png" alt="">
+                        <img src="../images/logo-text.png" alt="">
                     </span>
                 </a>
             </div>
@@ -144,9 +144,9 @@ $profile = getProfile($_SESSION['user']['id']);
                                 <span class="activity active"></span>
 
                                 <?php if ($profile['photo'] != NULL) : ?>
-                                    <img src="images/avatar/<?php echo $profile['photo'] ?>" width="40" height="40" alt="">
+                                    <img src="../images/avatar/<?php echo $profile['photo'] ?>" width="40" height="40" alt="">
                                 <?php else : ?>
-                                    <img class="mr-3" src="images/avatar/11.png" width="40" height="40" alt="">
+                                    <img class="mr-3" src="../images/avatar/11.png" width="40" height="40" alt="">
                                 <?php endif; ?>
 
                             </div>
@@ -154,14 +154,14 @@ $profile = getProfile($_SESSION['user']['id']);
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="profile.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="../dashboard/profile.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
 
                                         <hr class="my-2">
                                         <li>
-                                            <a href="changepassword.php"><i class="icon-lock"></i> <span>Change Password</span></a>
+                                            <a href="../dashboard/changepassword.php"><i class="icon-lock"></i> <span>Change Password</span></a>
                                         </li>
-                                        <li><a href="logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="../includes/logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -192,8 +192,8 @@ $profile = getProfile($_SESSION['user']['id']);
                             <i class="fa fa-shopping-cart menu-icon"></i><span class="nav-text">Categories</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="add-new-category.php">Add New</a></li>
-                            <li><a href="categories.php">All Categories</a></li>
+                            <li><a href="../categories/add-new.php">Add New</a></li>
+                            <li><a href="../categories/">All Categories</a></li>
                         </ul>
                     </li>
                     <li class="mega-menu mega-menu-sm">

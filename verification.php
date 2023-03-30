@@ -55,13 +55,6 @@ if (isset($_POST['mobile_verification'])) {
 
 
         // header("location:login.php");
-?>
-        <script>
-            setTimeout(function() {
-                window.location.href = "login.php"
-            },2000)
-        </script>
-<?php
     }
 }
 ?>
@@ -175,6 +168,13 @@ if (isset($_POST['mobile_verification'])) {
 
         unset($_SESSION['user_email']);
         unset($_SESSION['user_mobile']);
+    ?>
+        <script>
+            setTimeout(function() {
+                window.location.href = "login.php"
+            }, 2000)
+        </script>
+    <?php
     }
 
 

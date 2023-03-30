@@ -23,7 +23,7 @@ if (isset($_POST['login_form'])) {
 
             if ($userdata['mobile_status'] == 1 and $userdata['email_status'] == 1) {
                 $_SESSION['user'] = $userdata;
-                header("location:index.php");
+                header("location:dashboard/index.php");
             } else {
 
                 // user verification 
@@ -41,10 +41,10 @@ if (isset($_POST['login_form'])) {
                 mail($userdata['email'], "Email Verification", $message);
 
                 // mobile verification 
-                // $mobile_code = rand(111111, 999999);
+                $mobile_code = rand(111111, 999999);
 
-                // $stm = $connection->prepare("UPDATE users SET mobile_code=? WHERE mobile=?");
-                // $stm->execute(array($mobile_code, $userdata['mobile']));
+                $stm = $connection->prepare("UPDATE users SET mobile_code=? WHERE mobile=?");
+                $stm->execute(array($mobile_code, $userdata['mobile']));
 
 
                 header("location:verification.php");

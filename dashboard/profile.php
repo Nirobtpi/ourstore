@@ -1,7 +1,9 @@
 <?php
-require_once("config.php");
+require_once("../config.php");
 get_header();
 $profile = getProfile($_SESSION['user']['id']);
+$id=$_SESSION['user']['id'];
+// echo $id;
 ?>
 
 <div class="row page-titles mx-0">
@@ -22,9 +24,9 @@ $profile = getProfile($_SESSION['user']['id']);
                     <div class="media align-items-center mb-4">
 
                         <?php if ($profile['photo'] != NULL) : ?>
-                            <img class="mr-3" src="images/avatar/<?php echo $profile['photo'] ?>" width="80" height="80" alt="">
+                            <img class="mr-3" src="../images/avatar/<?php echo $profile['photo'] ?>" width="80" height="80" alt="">
                         <?php else : ?>
-                            <img class="mr-3" src="images/avatar/11.png" width="80" height="80" alt="">
+                            <img class="mr-3" src="../images/avatar/11.png" width="80" height="80" alt="">
                         <?php endif; ?>
 
                         <div class="media-body">
@@ -80,7 +82,7 @@ $profile = getProfile($_SESSION['user']['id']);
                     </ul>
                     <br>
                     <div class="col-12 text-center">
-                        <a href="update.php" class="btn btn-danger px-5">Update Profile</a>
+                        <a href="profile-edit.php?id=<?php echo $id ?>" class="btn btn-danger px-5">Update Profile</a>
                         <br>
                         <br>
                         <a href="changepassword.php" class="btn btn-warning px-5">Change Password</a>
@@ -92,5 +94,5 @@ $profile = getProfile($_SESSION['user']['id']);
     </div>
 </div>
 <!-- #/ container -->
-<?php require_once("footer.php")
+<?php get_footer()
 ?>

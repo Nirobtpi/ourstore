@@ -1,5 +1,5 @@
 <?php
-require_once("config.php");
+require_once("../config.php");
 get_header();
 $profile = getProfile($_SESSION['user']['id']);
 
@@ -67,7 +67,7 @@ if(isset($_POST['change_pass_form'])){
                         </div>
                         <script>
                             setTimeout(function(){
-                                window.location.href="logout.php";
+                                window.location.href="../includes/logout.php";
                             },2000)
                         </script>
                     <?php endif; ?>
@@ -94,5 +94,5 @@ if(isset($_POST['change_pass_form'])){
     </div>
 </div>
 <!-- #/ container -->
-<?php require_once("footer.php")
+<?php get_footer()
 ?>
