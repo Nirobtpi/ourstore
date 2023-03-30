@@ -3,7 +3,7 @@ session_start();
 require_once('../config.php');
 
 if (!isset($_SESSION['user'])) {
-    header("location:login.php");
+    header("location:". GET_APP_URL(). "/login.php");
 }
 $profile = getProfile($_SESSION['user']['id']);
 ?>
@@ -154,14 +154,14 @@ $profile = getProfile($_SESSION['user']['id']);
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="../dashboard/profile.php"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="<?php APP_URL() ?>/dashboard/profile.php"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
 
                                         <hr class="my-2">
                                         <li>
-                                            <a href="../dashboard/changepassword.php"><i class="icon-lock"></i> <span>Change Password</span></a>
+                                            <a href="<?php APP_URL() ?>/dashboard/changepassword.php"><i class="icon-lock"></i> <span>Change Password</span></a>
                                         </li>
-                                        <li><a href="../includes/logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                        <li><a href="<?php APP_URL() ?>/includes/logout.php"><i class="icon-key"></i> <span>Logout</span></a></li>
                                     </ul>
                                 </div>
                             </div>
