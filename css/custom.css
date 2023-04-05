@@ -1,0 +1,7 @@
+.media img{
+    border-radius: 50% !important;
+    object-fit: cover;
+}
+p{
+    margin-bottom: 0 !important;
+}

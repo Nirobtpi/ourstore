@@ -46,6 +46,8 @@ if (isset($_POST['login_form'])) {
                 $stm = $connection->prepare("UPDATE users SET mobile_code=? WHERE mobile=?");
                 $stm->execute(array($mobile_code, $userdata['mobile']));
 
+                $sms = "Your Verification Code is: " . $mobile_code;
+                SendSMS($userdata['mobile'], $sms);
 
                 header("location:verification.php");
             }

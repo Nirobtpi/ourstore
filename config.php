@@ -15,10 +15,10 @@
     require_once("functions.php");
 
     function APP_URL(){
-        echo "http://localhost/Ourstore";
+        echo "http://localhost/ourstore";
     }
     function GET_APP_URL(){
-        return "http://localhost/Ourstore";
+        return "http://localhost/ourstore";
     }
  
 ?>

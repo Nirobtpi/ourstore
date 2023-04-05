@@ -72,6 +72,10 @@ if (isset($_POST['registration_form'])) {
             $message="Your verification code is:" . $email_code;
             mail($email,"Email Verification", $message);
 
+            // send emial for varification 
+            $sms = "Your Verification Code is: " . $mobile_code;
+            SendSMS($mobile, $sms);
+
             // user verification 
 
             $_SESSION['user_email'] = $email;

@@ -3,7 +3,7 @@ session_start();
 require_once('../config.php');
 
 if (!isset($_SESSION['user'])) {
-    header("location:". GET_APP_URL(). "/login.php");
+    header("location:" . GET_APP_URL() . "/login.php");
 }
 $profile = getProfile($_SESSION['user']['id']);
 ?>
@@ -20,14 +20,16 @@ $profile = getProfile($_SESSION['user']['id']);
 
     <title>Our Store Dashboard</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon.png">
     <!-- Pignose Calender -->
     <link href="../plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <!-- Chartist -->
     <link rel="stylesheet" href="../plugins/chartist/css/chartist.min.css">
     <link rel="stylesheet" href="../plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
+    <link href="../plugins/summernote/dist/summernote.css" rel="stylesheet">
     <!-- Custom Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
 
 </head>
 
@@ -144,7 +146,7 @@ $profile = getProfile($_SESSION['user']['id']);
                                 <span class="activity active"></span>
 
                                 <?php if ($profile['photo'] != NULL) : ?>
-                                    <img src="../images/avatar/<?php echo $profile['photo'] ?>" width="40" height="40" alt="">
+                                    <img src="../uplodes/profile/<?php echo $profile['photo'] ?>" width="40" height="40" alt="">
                                 <?php else : ?>
                                     <img class="mr-3" src="../images/avatar/11.png" width="40" height="40" alt="">
                                 <?php endif; ?>
@@ -193,7 +195,7 @@ $profile = getProfile($_SESSION['user']['id']);
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="../categories/add-new.php">Add New</a></li>
-                            <li><a href="../categories/">All Categories</a></li>
+                            <li><a href="../categories/index.php">All Categories</a></li>
                         </ul>
                     </li>
                     <li class="mega-menu mega-menu-sm">
@@ -201,8 +203,8 @@ $profile = getProfile($_SESSION['user']['id']);
                             <i class="fa fa-shopping-cart menu-icon"></i><span class="nav-text">Products</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="add-new-product.php">Add New</a></li>
-                            <li><a href="productes.php">All Productes</a></li>
+                            <li><a href="../product/add-new.php">Add New</a></li>
+                            <li><a href="../product/index.php">All Productes</a></li>
                         </ul>
                     </li>
                     <li class="mega-menu mega-menu-sm">
@@ -210,8 +212,8 @@ $profile = getProfile($_SESSION['user']['id']);
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Manufacture</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="add-new-manufecture.php">Add New</a></li>
-                            <li><a href="manufacture.php">All Manufacture</a></li>
+                            <li><a href="../manufacture/add-new.php">Add New</a></li>
+                            <li><a href="../manufacture/index.php">All Manufacture</a></li>
                         </ul>
                     </li>
                     <li class="nav-label">Sels</li>
@@ -220,8 +222,18 @@ $profile = getProfile($_SESSION['user']['id']);
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Purchase</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="add-new-purchase.php">Add New</a></li>
-                            <li><a href="purchase.php">All Purchase</a></li>
+                            <li><a href="../purchase/add-new.php">Add New</a></li>
+                            <li><a href="../purchase/index.php">All Purchase</a></li>
+                            <li><a href="../purchase/groupPer.php">Gruopp Purchase</a></li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Groups</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="../groups/index.php">All Group</a></li>
+                            <!-- <li><a href="../groups/singleview.php">View</a></li> -->
                         </ul>
                     </li>
                     <li class="mega-menu mega-menu-sm">

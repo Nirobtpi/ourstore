@@ -24,7 +24,7 @@ $id=$_SESSION['user']['id'];
                     <div class="media align-items-center mb-4">
 
                         <?php if ($profile['photo'] != NULL) : ?>
-                            <img class="mr-3" src="../images/avatar/<?php echo $profile['photo'] ?>" width="80" height="80" alt="">
+                            <img class="mr-3" src="../uplodes/profile/<?php echo $profile['photo'] ?>" width="80" height="80" alt="">
                         <?php else : ?>
                             <img class="mr-3" src="../images/avatar/11.png" width="80" height="80" alt="">
                         <?php endif; ?>

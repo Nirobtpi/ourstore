@@ -1,14 +1,8 @@
 <?php
 require_once("../config.php");
 get_header();
+$user_id = $_SESSION['user']['id'];
 $id = $_SESSION['user']['id'];
-// echo $user_id;
-
-// $id = $_REQUEST['id'];
-// echo $id;
-
-// $id = $_REQUEST['id'];
-
 
 if (isset($_POST['registration_form'])) {
     $name = $_POST['name'];
@@ -16,7 +10,12 @@ if (isset($_POST['registration_form'])) {
     $business_name = $_POST['business_name'];
     $address = $_POST['address'];
     $gender = $_POST['gender'];
+    $photo = $_FILES['nirob']['name'];
     $date_of_birth = $_POST['date_of_birth'];
+
+    $target_dir = "../uplodes/profile/";
+    $target_file = $target_dir . basename($_FILES["nirob"]["name"]);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
 
 
@@ -39,12 +38,23 @@ if (isset($_POST['registration_form'])) {
         $error = "Address Is Required!";
     } elseif (empty($date_of_birth)) {
         $error = "Date Of Birth Is Required!";
+    } elseif (empty($photo)) {
+        $error = "Photo Is Required!";
+    } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+        $error = "Sorry, only JPG, JPEG, PNG  files are allowed.";
+    } elseif ($_FILES["nirob"]["size"] > 2000000) {
+        $error = "Photo Must Be Used Less Then 2mb!";
     } else {
+
+        $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
+        move_uploaded_file($_FILES["nirob"]["tmp_name"], $target_dir . $new_name);
+
+
         $created_at = date('Y-m-d H:i:s');
         $username = strtolower($username);
 
-        $stm = $connection->prepare("UPDATE users SET name=?,username=?,business_name=?,address=?,gender=?,date_of_birth=?,created_at=? WHERE id=?");
-        $stm->execute(array($name, $username, $business_name, $address, $gender, $date_of_birth, $created_at, $id));
+        $stm = $connection->prepare("UPDATE users SET name=?,username=?,business_name=?,address=?,gender=?,date_of_birth=?,photo=?,created_at=? WHERE id=?");
+        $stm->execute(array($name, $username, $business_name, $address, $gender, $date_of_birth, $new_name, $created_at, $id));
 
         $success = "Data Update Success!";
     }
@@ -76,7 +86,7 @@ if (isset($_POST['registration_form'])) {
                                 </div>
                             <?php endif; ?>
 
-                            <form action="" method="POST" class="mt-5 mb-5 login-input">
+                            <form action="" method="POST" class="mt-5 mb-5 login-input" enctype="multipart/form-data">
                                 <?php
 
                                 $stm = $connection->prepare("SELECT * FROM users WHERE id=?");
@@ -101,12 +111,20 @@ if (isset($_POST['registration_form'])) {
                                     <label for="add">Address</label>
                                     <textarea id="add" name="address" placeholder="Address" class="form-control"><?php echo $result['address'] ?></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label for="photo">Photo</label>
+                                    <input type="file" name="nirob" class="form-control" id="photo" value="<?php echo $result['photo'] ?>">
+                                </div>
                                 <div class="form-group radio">
                                     <label for="">Gender</label>
                                     <br>
-                                    <label><input type="radio" name="gender" value="Male" checked>Male</label>
+                                    <label><input <?php if ($result['gender'] == "Male") {
+                                        echo 'checked';
+                                    }; ?> type="radio" name="gender" value="Male">Male</label>
                                     <br>
-                                    <label><input type="radio" name="gender" value="Female">Female</label>
+                                    <label><input <?php if ($result['gender'] == "Female") {
+                                        echo "checked";
+                                    }; ?> type="radio" name="gender" value="Female">Female</label>
                                 </div>
                                 <div class="form-group">
                                     <label for="bt">Date Of Birth</label>

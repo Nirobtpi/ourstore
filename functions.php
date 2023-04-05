@@ -48,14 +48,6 @@
 
         return $result;
     }
-    // function GetSingleData1($tbl,$id){
-    //     global $connection;
-    //     $stm=$connection->prepare("SELECT * FROM $tbl WHERE user_id=? AND id=?");
-    //     $stm->execute(array($_SESSION['user']['id'],$id));
-    //     $result=$stm->fetch(PDO::FETCH_ASSOC);
-
-    //     return $result;
-    // }
 
 
     // Delete Table Data /////
@@ -66,13 +58,16 @@
         return $delete;
     }
 
+// Get Productes Category Name
 
+function getProductCategoryName($tbl,$val,$id){
+    global $connection;
+    $stm = $connection->prepare("SELECT $val FROM $tbl WHERE id=?");
+    $stm->execute(array($id));
+    $result = $stm->fetch(PDO::FETCH_ASSOC);
 
-
- 
-   
-
-
+    return $result[$val];
+}
 
 
 
@@ -88,4 +83,31 @@
     function get_footer(){
         require_once("includes/footer.php");
     }
+
+
+// Send OTP On Mobile Number
+function SendSMS($to, $message)
+{
+    $token = "85a94a9807036ee4b95d20956a818191";
+    $url = "http://api.greenweb.com.bd/api.php?json";
+
+    $data = array(
+        'to' => "$to",
+        'message' => "$message",
+        'token' => "$token"
+    );
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_ENCODING, '');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $smsresult = curl_exec($ch);
+    $smsresult = json_decode($smsresult, true);
+    $status = $smsresult[0]['status'];
+    return $status;
+    //Error Display
+    // echo curl_error($ch);
+}
 ?>
