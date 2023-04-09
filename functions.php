@@ -58,7 +58,7 @@
         return $delete;
     }
 
-// Get Productes Category Name
+// Get Productes Category Name and Get  SIngle Name
 
 function getProductCategoryName($tbl,$val,$id){
     global $connection;

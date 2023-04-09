@@ -241,8 +241,8 @@ $profile = getProfile($_SESSION['user']['id']);
                             <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Sales</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="add-new-sales.php">Add New</a></li>
-                            <li><a href="sales.php">All Sales</a></li>
+                            <li><a href="../sales/add-new.php">Add New</a></li>
+                            <li><a href="../sales/index.php">All Sales</a></li>
                         </ul>
                     </li>
                     <li>

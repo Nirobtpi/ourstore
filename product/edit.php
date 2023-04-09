@@ -33,8 +33,8 @@ if (isset($_POST['add_new_form'])) {
     }
     else {
 
-        // $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
-        // move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir . $new_name);
+        $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
+        move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir . $new_name);
 
         $now = date('Y-m-d H:i:s');
 

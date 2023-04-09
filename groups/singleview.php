@@ -21,7 +21,7 @@ $purchasesDetailesEx = GetSingleData('groups', $id);
         <div class="col-lg-12 col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Purchase Details</h4>
+                    <h4 class="card-title">Groups Details</h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table header-border">
