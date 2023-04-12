@@ -184,7 +184,7 @@ $profile = getProfile($_SESSION['user']['id']);
                 <ul class="metismenu" id="menu">
                     <li class="nav-label">Dashboard</li>
                     <li>
-                        <a href="index.php">
+                        <a href="<?php APP_URL() ?>/index.php">
                             <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
@@ -242,6 +242,15 @@ $profile = getProfile($_SESSION['user']['id']);
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="../sales/add-new.php">Add New</a></li>
+                            <li><a href="../sales/index.php">All Sales</a></li>
+                        </ul>
+                    </li>
+                    <li class="mega-menu mega-menu-sm">
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Reports</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="../report/monthSales.php?id=<?php echo $_SESSION['user']['id'] ?>">Sales Report</a></li>
                             <li><a href="../sales/index.php">All Sales</a></li>
                         </ul>
                     </li>

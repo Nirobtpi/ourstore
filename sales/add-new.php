@@ -4,20 +4,29 @@ get_header();
 $user_id = $_SESSION['user']['id'];
 $id = $_SESSION['user']['id'];
 
-if (isset($_POST['add_new_purchase_form'])) {
+if (isset($_POST['add_new_sales_form'])) {
+    $customer_name = $_POST['customer_name'];
     $product_id = $_POST['product_id'];
     $manufacture_id = $_POST['manufacture_id'];
     $group_name = $_POST['group_name'];
+    $expair_date = $_POST['expair_date'];
     $item_price = $_POST['price'];
     $manu_price = $_POST['manu_price'];
     $quantity = $_POST['quantity'];
-    $expair_date = $_POST['expair_date'];
+    $total_price = $_POST['total_price'];
+    $descount_type = $_POST['descount_type'];
+    $discount_ammount = $_POST['discount_ammount'];
+    $sub_total = $_POST['sub_total'];
 
 
-    if (empty($item_price)) {
-        $error = "Price Is Required!";
-    } elseif (!is_numeric($item_price)) {
-        $error = "Price Must Be Number!";
+    $db_date = getProductCategoryName('groups', 'expire_date', $group_name);
+    $db_stock = getProductCategoryName('productes', 'stock', $product_id);
+
+
+    if (empty($customer_name)) {
+        $error = "Custome Name Is Required!";
+    } elseif (empty($product_id)) {
+        $error = "Product Is Number!";
     } elseif (empty($manu_price)) {
         $error = "Manufacture Price Is Required!";
     } elseif (!is_numeric($manu_price)) {
@@ -28,21 +37,25 @@ if (isset($_POST['add_new_purchase_form'])) {
         $error = "Quantity Must Be a Number!";
     } elseif (empty($expair_date)) {
         $error = "Expair Date Is Required!";
+    } elseif ($db_date < date('Y-m-d')) {
+        $error = "Your Product is Expair!";
+    } elseif ($quantity > $db_stock) {
+        $error = "Product is Low!";
     } else {
 
         $now = date('Y-m-d H:i:s');
-        $total_price = $item_price * $quantity;
-        $total_M_price = $manu_price * $quantity;
+        $pr_manu_price = $quantity * $manu_price;
+        $final_profit = $sub_total - $pr_manu_price;
 
         // gropu table 
-        $stm = $connection->prepare("INSERT INTO groups(user_id,group_name,product_id,quantity,expire_date,per_item_price,per_item_m_price,total_item_price,total_item_m_price,created_at)VALUES(?,?,?,?,?,?,?,?,?,?)");
-        $stm->execute(array($user_id, $group_name, $product_id, $quantity, $expair_date, $item_price, $manu_price, $total_price, $total_M_price, $now));
+        $stm = $connection->prepare("INSERT INTO sales(user_id,customer_name,product_id,manufacture_id,group_id,expire_date,quantity,item_price,manu_price,total_price,descount_type,discount_ammount,sub_total,profit,created_at)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stm->execute(array($user_id, $customer_name, $product_id,$manufacture_id,$group_name,$expair_date, $quantity, $item_price, $manu_price,$total_price, $descount_type,$discount_ammount, $sub_total,$final_profit, $now));
 
-        // purchases table 
-        $stm = $connection->prepare("INSERT INTO purchases(user_id,manufacture_id,product_id,group_name,quantity,per_item_price,per_item_m_price,total_item_price,total_item_m_price,created_at)VALUES(?,?,?,?,?,?,?,?,?,?)");
-        $stm->execute(array($user_id, $manufacture_id, $product_id, $group_name, $quantity, $item_price, $manu_price, $total_price, $total_M_price, $now));
+        // stock - 
+        $st = $connection->prepare("UPDATE productes SET stock=stock-? WHERE id=?");
+        $st->execute(array($quantity, $product_id));
 
-        $success = "Create Successfully!";
+        $success = "Sales Successfully!";
     }
 }
 
@@ -78,10 +91,10 @@ if (isset($_POST['add_new_purchase_form'])) {
 
                     <div id="ajaxError" style="display: none;" class="alert alert-danger"></div>
                     <div class="basic-form">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="" method="POST">
                             <div class="form-group">
                                 <label for="customer_name">Customer Name:</label>
-                                <input type="text" name="customer_name" class="form-control input-default" placeholder="Customer Name" id="customer_name">
+                                <input type="text" name="customer_name" class="form-control input-default" placeholder="Customer Name" id="customer_name" required>
                             </div>
                             <div class="form-group">
                                 <label for="product_id">Select Product:</label>
@@ -111,7 +124,7 @@ if (isset($_POST['add_new_purchase_form'])) {
                             </div>
                             <div class="form-group">
                                 <label for="price">Price:</label>
-                                <input type="text" name="price" class="form-control input-default" id="price" readonly>
+                                <input type="text" name="price" class="form-control input-default" id="price" readonly required>
                             </div>
                             <div class="form-group">
                                 <label for="manu_price">Manufacture Price:</label>
@@ -119,7 +132,7 @@ if (isset($_POST['add_new_purchase_form'])) {
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity: <span id="av_stock" class="badge badge-info"></span></label>
-                                <input type="number" name="quantity" class="form-control input-default" placeholder="Quantity" id="quantity">
+                                <input type="number" name="quantity" class="form-control input-default" placeholder="Quantity" id="quantity" required>
                                 <input type="hidden" name="stock" id="stock">
                             </div>
                             <div class="form-group">
@@ -144,7 +157,7 @@ if (isset($_POST['add_new_purchase_form'])) {
                             </div>
 
                             <div class="form-group">
-                                <input type="submit" name="add_new_purchase_form" class="btn btn-success" value="Create Sales">
+                                <input type="submit" name="add_new_sales_form" class="btn btn-success" value="Create Sales">
                             </div>
                         </form>
                     </div>

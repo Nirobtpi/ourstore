@@ -22,7 +22,7 @@ $id = $_SESSION['user']['id'];
         <div class="col-lg-12 col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">All Purchase</h4>
+                    <h4 class="card-title">All Sales</h4>
                     <div class="table-responsive">
                         <table class="table header-border">
                             <?php if (isset($_REQUEST['success'])) : ?>
@@ -36,8 +36,7 @@ $id = $_SESSION['user']['id'];
                                     <th>Product Name</th>
                                     <th>Manufacture</th>
                                     <th>Group</th>
-                                    <th>Total Price</th>
-                                    <th>Total Manu Price</th>
+                                    <th>Sub Total</th>
                                     <th>Quantity</th>
                                     <th>Date</th>
                                     <th>Action</th>
@@ -45,29 +44,28 @@ $id = $_SESSION['user']['id'];
                             </thead>
                             <tbody>
                                 <?php
-                                $purchases = GetTableData('purchases');
+                                $sales = GetTableData('sales');
                                 // print_r($purchases);
 
                                 $i = 1;
-                                foreach ($purchases as $purchase) :
+                                foreach ($sales as $sale) :
 
                                 ?>
                                     <tr>
                                         <td><?php echo $i;
                                             $i++; ?></td>
-                                        <td><?php echo getProductCategoryName('productes', 'product_name', $purchase['product_id']) ?></td>
-                                        <td><?php echo getProductCategoryName('manufacture', 'name', $purchase['manufacture_id']) ?></td>
-                                        <td><?php echo $purchase['group_name'] ?></td>
-                                        <td><?php echo $purchase['total_item_price'] ?></td>
-                                        <td><?php echo $purchase['total_item_m_price'] ?></td>
-                                        <td><?php echo $purchase['quantity'] ?></td>
-                                        <td><?php echo date('d-m-Y', strtotime($purchase['created_at'])) ?></td>
+                                        <td><?php echo getProductCategoryName('productes', 'product_name', $sale['product_id']) ?></td>
+                                        <td><?php echo getProductCategoryName('manufacture', 'name', $sale['manufacture_id']) ?></td>
+                                        <td><?php echo getProductCategoryName('groups', 'group_name', $sale['group_id']) ?></td>
+                                        <td><?php echo $sale['sub_total'] ?></td>
+                                        <td><?php echo $sale['quantity'] ?></td>
+                                        <td><?php echo date('d-m-Y', strtotime($sale['created_at'])) ?></td>
                                         <td>
-                                            <a href="singleview.php?id=<?php echo $purchase['id'] ?>" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a> &nbsp;&nbsp;
+                                            <a href="singleview.php?id=<?php echo $sale['id'] ?>" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a> &nbsp;&nbsp;
 
-                                            <a href="edit.php?id=<?php echo $purchase['id'] ?>" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                                            <a href="edit.php?id=<?php echo $sale['id'] ?>" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
 
-                                            <a href="delete.php?id=<?php echo $purchase['id'] ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                            <a href="delete.php?id=<?php echo $sale['id'] ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

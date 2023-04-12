@@ -38,8 +38,8 @@ if (isset($_POST['add_new_form'])) {
 
         $now = date('Y-m-d H:i:s');
 
-        $stm = $connection->prepare("INSERT INTO productes(user_id,product_name,category_id,description,photo,created_at)VALUES(?,?,?,?,?,?) ");
-        $stm->execute(array($user_id, $product_name, $category_id, $description, $new_photo_name, $now));
+        $stm = $connection->prepare("INSERT INTO productes(user_id,product_name,category_id,description,photo,stock,created_at)VALUES(?,?,?,?,?,?,?) ");
+        $stm->execute(array($user_id, $product_name, $category_id, $description, $new_photo_name,'Null', $now));
 
         $success = "Product  Create Successfully!";
     }

@@ -5,7 +5,7 @@ get_header();
 // $id = $_SESSION['user']['id'];
 $id = $_REQUEST['id'];
 
-$purchasesDetailes = GetSingleData('purchases', $id);
+$purchasesDetailes = GetSingleData('sales', $id);
 // $purchasesDetailesEx = GetSingleData('groups', $id);
 // echo $purchasesDetailesEx['name'];
 // $proDetailes = GetSingleData('productes', $id)
@@ -27,11 +27,15 @@ $purchasesDetailes = GetSingleData('purchases', $id);
         <div class="col-lg-12 col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Purchase Details</h4>
+                    <h4 class="card-title">Sales Details</h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table header-border">
                             <tbody>
+                                <tr>
+                                    <td>Customer Name:</td>
+                                    <td><?php echo $purchasesDetailes['customer_name'] ?></td>
+                                </tr>
                                 <tr>
                                     <td>Product Name:</td>
                                     <td><?php echo getProductCategoryName('productes', 'product_name', $purchasesDetailes['product_id']) ?></td>
@@ -42,27 +46,39 @@ $purchasesDetailes = GetSingleData('purchases', $id);
                                 </tr>
                                 <tr>
                                     <td>Group Name:</td>
-                                    <td><?php echo $purchasesDetailes['group_name'] ?></td>
+                                    <td><?php echo  getProductCategoryName('groups', 'group_name', $purchasesDetailes['group_id'])  ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Expire Date:</td>
+                                    <td><?php echo  getProductCategoryName('groups', 'expire_date', $purchasesDetailes['group_id'])  ?></td>
                                 </tr>
                                 <tr>
                                     <td>Quantity:</td>
                                     <td><?php echo $purchasesDetailes['quantity'] ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Pet Item Price:</td>
-                                    <td><?php echo $purchasesDetailes['per_item_price'] ?> Tk</td>
+                                    <td>Discount:</td>
+
+                                    <td><?php
+                                        if ($purchasesDetailes['descount_type'] == "fixed") {
+                                            echo $purchasesDetailes['discount_ammount'] . "Tk";
+                                        }
+                                        else if ($purchasesDetailes['descount_type'] == "percentage") {
+                                            echo $purchasesDetailes['discount_ammount'] . "%";
+                                        } else {
+                                            echo "None";
+                                        }
+
+                                        ?>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>Total Item Price:</td>
-                                    <td><?php echo $purchasesDetailes['total_item_price'] ?> Tk</td>
+                                    <td>Sub Price:</td>
+                                    <td><?php echo $purchasesDetailes['sub_total'] ?> Tk</td>
                                 </tr>
                                 <tr>
-                                    <td>Pet Item Manufacture Price:</td>
-                                    <td><?php echo $purchasesDetailes['per_item_m_price'] ?> Tk</td>
-                                </tr>
-                                <tr>
-                                    <td>Total Manufacture Price:</td>
-                                    <td><?php echo $purchasesDetailes['total_item_m_price'] ?> Tk</td>
+                                    <td>Profit:</td>
+                                    <td><?php echo $purchasesDetailes['profit'] ?> Tk</td>
                                 </tr>
                                 <tr>
                                     <td>Created Date:</td>

@@ -32,8 +32,7 @@
             $error="Expair Date Is Required!";
         }elseif($groupCount !=0){
             $error="Group Name Alredy Used!";
-        }
-         else{
+        } else{
 
             $now=date('Y-m-d H:i:s');
             $total_price= $item_price*$quantity;
@@ -47,12 +46,10 @@
             $stm=$connection->prepare("INSERT INTO purchases(user_id,manufacture_id,product_id,group_name,quantity,per_item_price,per_item_m_price,total_item_price,total_item_m_price,created_at)VALUES(?,?,?,?,?,?,?,?,?,?)");
             $stm->execute(array($user_id, $manufacture_id, $product_id, $group_name, $quantity, $item_price, $manu_price, $total_price, $total_M_price,$now));
 
-        // Update product Stock 
-        // $stm2=$connection->prepare("UPDATE productes SET stock=stock+? WHERE id=? AND user_id=?");
-        // $stm2->execute(array($quantity,$product_id,$user_id));
-        $stm2 = $connection->prepare("UPDATE productes SET stock=stock+? WHERE id=? AND user_id=?");
-        $stm2->execute(array($quantity, $product_id, $user_id));
-
+            // Update product Stock 
+            $stm2=$connection->prepare("UPDATE productes SET stock=stock+? WHERE id=? AND user_id=?");
+            $stm2->execute(array($quantity,$product_id,$user_id));
+  
             $success = "Create Successfully!";
         }
 

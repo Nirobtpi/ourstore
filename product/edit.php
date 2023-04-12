@@ -12,7 +12,6 @@ if (isset($_POST['add_new_form'])) {
     $product_name = $_POST['product_name'];
     $category_id = $_POST['category_id'];
     $description = $_POST['description'];
-    $photo = $_FILES['photo']['name'];
 
     $target_dir = "../uplodes/products/";
     $target_file = $target_dir . basename($_FILES["photo"]["name"]);
@@ -24,26 +23,54 @@ if (isset($_POST['add_new_form'])) {
         $error = "Product Name Required!";
     } elseif (empty($category_id)) {
         $error = "Category Name Required!";
-    } elseif (empty($photo)) {
-        $error = "Photo is  Required!";
     } elseif (empty($description)) {
         $error = "Description is Required!";
-    } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-        $error = "Sorry, only JPG, JPEG, PNG  files are allowed.";
-    }
-    else {
+    } else {
+        $image_link = getProductCategoryName('productes', 'photo', $id);
 
-        $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
-        move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir . $new_name);
+        if (!empty($_FILES['photo']['name'])) {
 
-        $now = date('Y-m-d H:i:s');
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $error = "Sorry, only JPG, JPEG, PNG  files are allowed.";
+            } else {
+                $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
+                move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir . $new_name);
 
-        $stm = $connection->prepare("UPDATE productes SET product_name=?,category_id=?,description=?,photo=?,created_at=? WHERE id=? ");
-        $stm->execute(array($product_name, $category_id, $description, $new_name, $now, $id));
+                if (file_exists($target_dir . $image_link)) {
+                    unlink($target_dir . $image_link);
+                }
+            }
+            $image_link =  $new_name;
+        }
+
+        $stm = $connection->prepare("UPDATE productes SET product_name=?,category_id=?,description=?,photo=? WHERE id=? ");
+        $stm->execute(array($product_name, $category_id, $description, $image_link, $id));
 
         $success = "Product  Update Successfully!";
     }
 }
+
+// option 1
+
+// if (!empty($_FILES['photo']['name'])) {
+
+//     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+//         $error = "Sorry, only JPG, JPEG, PNG  files are allowed.";
+//     } else {
+//         $new_name = $id . "-" . rand(1111, 9999) . "-" . time() . '.' . $imageFileType;
+//         move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir . $new_name);
+
+//         $stm = $connection->prepare("UPDATE productes SET product_name=?,category_id=?,description=?,photo=? WHERE id=? ");
+//         $stm->execute(array($product_name, $category_id, $description, $new_name, $id));
+
+//         $success = "Product  Update Successfully!";
+//     }
+// } else {
+//     $stm = $connection->prepare("UPDATE productes SET product_name=?,category_id=?,description=? WHERE id=? ");
+//     $stm->execute(array($product_name, $category_id, $description, $id));
+
+//     $success = "Product  Update Successfully!";
+// }
 
 ?>
 
@@ -90,7 +117,9 @@ if (isset($_POST['add_new_form'])) {
                                     $categories = GetTableData('categories');
                                     foreach ($categories as $category) :
                                     ?>
-                                        <option value="<?php echo $category['id'] ?>">
+                                        <option value="<?php echo $category['id'] ?>" <?php if ($product['category_id'] == $category['id']) {
+                                                                                            echo 'selected';
+                                                                                        } ?>>
                                             <?php echo $category['category_name']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -100,8 +129,11 @@ if (isset($_POST['add_new_form'])) {
                                 <textarea name="description" class="form-control summernote" id="description" cols="30" rows="5"><?php echo $product['description'] ?></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="photo">Photo:</label>
+                                <label for="photo">Photo&nbsp; <mark>Skip it; if you won't update photo</mark> </label>
                                 <input type="file" name="photo" class="form-control input-default" id="photo">
+                                <div class="preview mt-3">
+                                    <img style="height: 80px; " src="../uplodes/products/<?php echo $product['photo'] ?>">
+                                </div>
                             </div>
 
                             <div class="form-group">
